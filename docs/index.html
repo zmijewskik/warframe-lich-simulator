@@ -3,20 +3,29 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Lich simulator for Warframe players" />
+    <meta name="description" content="Kuva Lich simulator for Warframe players" />
     <link rel="stylesheet" type="text/css" href="styles.css" />
-    <title>Lich Simulator</title>
+    <title>Kuva Lich Simulator</title>
   </head>
   <body>
-    <h1>Lich Simulator</h1>
+    <h1>Kuva Lich Simulator</h1>
 
     <button id="btn-generate-lich">Generate Lich</button>
 
     <p class="center">Lich's Signs</p>
-    <div class="image-container">
-      <div class="image center" id="image1"></div>
-      <div class="image center" id="image2"></div>
-      <div class="image center" id="image3"></div>
+    <div class="all-signs-container">
+      <div class="sign-container">
+        <div class="image center" id="image1"></div>
+        <p class="sign-name" id="signName1"></p>
+      </div>
+      <div class="sign-container">
+        <div class="image center" id="image2"></div>
+        <p class="sign-name" id="signName2"></p>
+      </div>
+      <div class="sign-container">
+        <div class="image center" id="image3"></div>
+        <p class="sign-name" id="signName3"></p>
+      </div>
     </div>
 
     <form id="user-combination-form">
@@ -25,42 +34,43 @@
         <!-- <label for="number1">Number 1:</label> -->
         <select name="number1" id="number1">
           <optgroup label="First sign">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
+            <!-- <option value="FassRequiemIcon.webp">Fass</option>
+            <option value="JahuRequiemIcon.webp">Jahu</option>
+            <option value="KhraRequiemIcon.webp">Jahu</option>
+            <option value="LohkRequiemIcon.webp">Jahu</option>
+            <option value="NetraRequiemIcon.webp">Jahu</option>
+            <option value="RisRequiemIcon.webp">Jahu</option>
+            <option value="VomeRequiemIcon.webp">Jahu</option>
+            <option value="XataRequiemIcon.webp">Jahu</option>
+            <option value="OullRequiemIcon.webp">Jahu</option> -->
           </optgroup>
         </select>
-
+        
         <!-- <label for="number2">Number 2:</label> -->
         <select name="number2" id="number2">
           <optgroup label="Second sign">
-            <option value="1">1</option>
+            <!-- <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
             <option value="5">5</option>
             <option value="6">6</option>
             <option value="7">7</option>
-            <option value="8">8</option>
+            <option value="8">8</option> -->
           </optgroup>
         </select>
 
         <!-- <label for="number3">Number 3:</label> -->
         <select name="number3" id="number3">
           <optgroup label="Third sign">
-            <option value="1">1</option>
+            <!-- <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
             <option value="5">5</option>
             <option value="6">6</option>
             <option value="7">7</option>
-            <option value="8">8</option>
+            <option value="8">8</option> -->
           </optgroup>
         </select>
       </div>
