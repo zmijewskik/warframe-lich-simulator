@@ -23,11 +23,20 @@ h1 {
   height: 50px;
   border: 1px solid #000;
   margin: 0 5px;
-  text-align: center;
 }
 
 #btn-generate-lich {
   width: 100px;
   margin: 20px 20px;
   text-align: center;
+}
+
+#btn-check-combination {
+ margin: 20px;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
