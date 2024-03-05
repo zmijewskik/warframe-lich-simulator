@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="Kuva Lich simulator for Warframe players" />
     <link rel="stylesheet" type="text/css" href="styles.css" />
+    <link rel="stylesheet" media="screen" href="https://fontlibrary.org//face/roboto-old" type="text/css"/>
     <title>Kuva Lich Simulator</title>
   </head>
   <body>
@@ -23,33 +24,40 @@
     <h2>Known Requiems</h2>
     <div class="all-signs-container">
       <div class="sign-container">
-        <div class="image" id="image1"></div>
-        <p class="sign-name" id="signName1"></p>
+        <button class="btn-sign-visibility" data-target="sign1-container">Show</button>
+        <div id="sign1-container">
+          <div class="image" id="image1"></div>
+          <p class="sign-name" id="signName1"></p>
+        </div>
       </div>
       <div class="sign-container">
-        <div class="image" id="image2"></div>
-        <p class="sign-name" id="signName2"></p>
+        <button class="btn-sign-visibility" data-target="sign2-container">Show</button>
+        <div id="sign2-container">
+          <div class="image" id="image2"></div>
+          <p class="sign-name" id="signName2"></p>
+        </div>
       </div>
       <div class="sign-container">
-        <div class="image" id="image3"></div>
-        <p class="sign-name" id="signName3"></p>
+        <button class="btn-sign-visibility" data-target="sign3-container">Show</button>
+        <div id="sign3-container">
+          <div class="image" id="image3"></div>
+          <p class="sign-name" id="signName3"></p>
+        </div>
       </div>
     </div>
 
     <h2>Signs in Parazon</h2>
     <form id="user-combination-form">
       <div>
-        <select name="number1" id="number1">
+        <select name="sign1" id="sign1">
           <optgroup label="First sign">
           </optgroup>
         </select>
-        
-        <select name="number2" id="number2">
+        <select name="sign2" id="sign2">
           <optgroup label="Second sign">
           </optgroup>
         </select>
-
-        <select name="number3" id="number3">
+        <select name="sign3" id="sign3">
           <optgroup label="Third sign">
           </optgroup>
         </select>
@@ -59,6 +67,10 @@
       </div>
     </form>
 
+    <div class="footer">
+      <div>GitHub: <a href="https://github.com/zmijewskik" title="zmijewskik">zmijewskik</a></div>
+    </div>
+    
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <script type="module" src="dist/index.js"></script>
   </body>

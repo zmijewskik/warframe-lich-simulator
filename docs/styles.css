@@ -1,7 +1,14 @@
 /* color palette - https://www.colourlovers.com/palette/4775628/Cyberpunk_2077 */
+:root {
+  --bg-color: #000000;
+  --main-color: #F3E600;
+  --secondary-color: #04DAF6;
+  --accent-color: #FF003C;
+  --text-color: #FFFFFF;
+}
 
 body {
-  background-color: #000000;
+  background-color: var(--bg-color);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -9,25 +16,33 @@ body {
   margin: 0;
   padding: 0;
   height: 100vh;
+  font-family: 'RobotoRegular', sans-serif;
+  font-weight: normal;
+  font-style: normal;
 }
 
 h1,
 h2{
-  color: white;
+  color: var(--text-color);
   text-align: center;
   margin: 8px auto;
 }
 
+button {
+  border-width: 0px;
+}
+
 #btn-generate-lich {
-  width: 100px;
+  /* width: 100px; */
 }
 
 #btn-check-combination {
-  width: 150px; 
+  /* width: 150px;  */
 }
 
 #btn-generate-lich,
 #btn-check-combination {
+  font-size: 14px;
   padding: 8px;
   margin: 16px auto;
   border-radius: 20px;
@@ -35,19 +50,29 @@ h2{
   transition-duration: 0.33s;
 }
 
-@media (hover: hover) {
+.btn-sign-visibility {
+  font-size: 14px;
+  padding: 8px;
+  margin: 8px 8px;
+  border-radius: 20px;
+  text-align: center;
+  transition-duration: 0.33s;
+}
+
+@media (hover: hover) and (pointer: fine){
   #btn-generate-lich:hover,
-  #btn-check-combination:hover {
-    background-color: #FF003C;
-    color: white;
+  #btn-check-combination:hover,
+  .btn-sign-visibility:hover {
+    background-color: var(--accent-color);
+    color: var(--text-color);
   }
   .all-signs-container:hover {
-    background-color: #04DAF6;
+    background-color: var(--secondary-color);
   }
 }
 
 .all-signs-container {
-  background-color: #F3E600;
+  background-color: var(--main-color);
   border-radius: 20px;
   display: flex;
   justify-content: space-between;
@@ -56,26 +81,47 @@ h2{
 
 .sign-container {
   display: flex;
-  height: 136px;
+  width: 100px;
+  height: 180px;
   flex-direction: column;
   /* border: 1px solid #000; */
+}
+
+#sign1-container,
+#sign2-container,
+#sign3-container {
+  display: none;
+  flex-direction: column;
 }
 
 .image {
   width: 100px;
   height: 100px;
-  /* border: 1px solid #000; */
   margin: 0 auto;
+  /* border: 1px solid #000; */
 }
 
 .sign-name {
-  font-size: 16px;
+  font-size: 14px;
   text-align: center;
-  margin: 0;
+  padding: 0px;
+  margin: 8px;
 }
 
 #user-combination-form {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--main-color);
 }
