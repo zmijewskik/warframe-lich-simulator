@@ -9,14 +9,6 @@
     <title>Kuva Lich Simulator</title>
   </head>
   <body>
-    <!--
-    TBA:
-    - spawn lich -> not showing the signs straight away
-    - button to see next known signs / they should be random
-    - list of tries
-    - lich lvl indicator
-    - better Parazon modyfing
-    -->
     <h1>Kuva Lich Simulator</h1>
 
     <button id="btn-generate-lich">Spawn Lich</button>
@@ -48,29 +40,25 @@
 
     <h2>Signs in Parazon</h2>
     <form id="user-combination-form">
-      <div>
-        <select name="sign1" id="sign1">
-          <optgroup label="First sign">
-          </optgroup>
-        </select>
-        <select name="sign2" id="sign2">
-          <optgroup label="Second sign">
-          </optgroup>
-        </select>
-        <select name="sign3" id="sign3">
-          <optgroup label="Third sign">
-          </optgroup>
-        </select>
+      <div class="all-user-signs-container">
+        <div id="sign1" class="empty-box"></div>
+        <div id="sign2" class="empty-box"></div>
+        <div id="sign3" class="empty-box"></div>
       </div>
       <div>
         <button type="button" id="btn-check-combination">Check Combination</button>
       </div>
     </form>
 
+    <div>
+      <div class="selectable-signs-container" id="selectableSignsContainer">
+      </div>
+    </div>
+
     <div class="footer">
       <div>GitHub: <a href="https://github.com/zmijewskik" title="zmijewskik">zmijewskik</a></div>
     </div>
-    
+
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <script type="module" src="dist/index.js"></script>
   </body>

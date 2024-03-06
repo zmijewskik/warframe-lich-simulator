@@ -10,23 +10,11 @@ const allSignNames: string[] = [
   'Ris',
   'Vome',
   'Xata',
-  // 'Oull', 
+  'Oull', 
 ]
+const lichSignNames: string[] = allSignNames.slice(0, -1);
 
-function populateDropdownOptions(selectId: string, allSignNames: string[]): void {
-  const selectElement = document.getElementById(selectId) as HTMLSelectElement;
-
-  allSignNames.forEach((imageName, index) => {
-    const option = document.createElement('option');
-    option.value = imageName;
-    option.text = `${imageName}`;
-    selectElement.add(option);
-  });
-}
-
-populateDropdownOptions('sign1', allSignNames);
-populateDropdownOptions('sign2', allSignNames);
-populateDropdownOptions('sign3', allSignNames);
+populateSelectableSigns();
 
 const buttons = document.querySelectorAll<HTMLButtonElement>('.btn-sign-visibility');
 
@@ -58,41 +46,16 @@ function shuffleArray<T>(array: T[]): T[] {
   return shuffledArray;
 }
 
-function resetSignContainer() {
-  buttons.forEach(button => {
-    const targetId = button.dataset.target;
-
-    if (targetId) {
-      const container = document.getElementById(targetId);
-      if (container) {
-        container.style.display = 'none';
-        button.innerText = 'Show';
-      }
-    }
-  });
-}
-
 function generateSignSequence() {
-  const signNames: string[] = [
-    'Fass',
-    'Jahu',
-    'Khra',
-    'Lohk',
-    'Netra',
-    'Ris',
-    'Vome',
-    'Xata',
-  ]
+  const signNames: string[] = lichSignNames;
 
   const matchingSequence: string[] = shuffleArray(signNames).slice(0, 3);
-
   const shuffledSequence: string[] = shuffleArray(matchingSequence);
 
   resetSignContainer();
   resetUserInputFields();
 
   const signs = document.querySelectorAll('.image');
-
   signs.forEach((image, index) => {
     const imageElement = image as HTMLElement;
     const signNameElement = document.getElementById(`signName${index + 1}`) as HTMLElement;
@@ -102,13 +65,6 @@ function generateSignSequence() {
   });
 
   sessionStorage.setItem('matchingSequence', JSON.stringify(matchingSequence));
-
-  // const allSignContainers = Array.from(document.querySelectorAll('.sign-container'));
-
-  // shuffleArray(allSignContainers).forEach((container, index) => {
-  //   const containerElement = container as HTMLElement;
-  //   containerElement.style.order = (index + 1).toString();
-  // });
 }
 
 function checkCombination() {
@@ -123,24 +79,16 @@ function checkCombination() {
 }
 
 function getUserSignNames(): string[] {
-  const signName1 = (document.getElementById('sign1') as HTMLInputElement).value;
-  const signName2 = (document.getElementById('sign2') as HTMLInputElement).value;
-  const signName3 = (document.getElementById('sign3') as HTMLInputElement).value;
+  const signContainer1  = (document.getElementById('sign1') as HTMLDivElement);
+  const signContainer2 = (document.getElementById('sign2') as HTMLDivElement);
+  const signContainer3 = (document.getElementById('sign3') as HTMLDivElement);
+
+  const signName1 = signContainer1.innerText.trim();
+  const signName2 = signContainer2.innerText.trim();
+  const signName3 = signContainer3.innerText.trim();
 
   return [signName1, signName2, signName3];
 }
-
-// function getGeneratedSignNames(): string[] {
-//   const images = document.querySelectorAll('.image');
-//   const generatedSignNames: string[] = [];
-
-//   images.forEach((image) => {
-//     const signNameElement = document.getElementById(`signName${generatedSignNames.length + 1}`) as HTMLElement;
-//     generatedSignNames.push(signNameElement.textContent || '');
-//   });
-
-//   return generatedSignNames;
-// }
 
 function getMatchingSequence(): string[] {
   const matchingSequenceJSON = sessionStorage.getItem('matchingSequence');
@@ -153,10 +101,103 @@ function getMatchingSequence(): string[] {
 }
 
 function arraysEqual(arr1: string[], arr2: string[]): boolean {
-  return arr1.length === arr2.length && arr1.every((value, index) => value === arr2[index]);
+  return arr1.length === arr2.length && 
+  arr1.every((value, index) => value === arr2[index] || value === 'Oull');
 }
+
+// selecting signs for Parazon
+
+let selectedBox: HTMLDivElement | null = null;
+
+function selectBox(box: HTMLDivElement) {
+  if (selectedBox !== null) {
+      selectedBox.classList.remove('selected');
+  }
+  selectedBox = box;
+  selectedBox.classList.add('selected');
+
+  const emptyBoxes = document.querySelectorAll('.empty-box');
+  emptyBoxes.forEach(emptyBox => emptyBox.classList.add('highlight-animation'));
+}
+
+const signContainers = document.querySelectorAll('.user-sign-container');
+signContainers.forEach(container => container.addEventListener('click', () => selectBox(container as HTMLDivElement)));
+
+function selectDestination(emptyBox: HTMLDivElement) {
+  if (selectedBox !== null) {
+      emptyBox.classList.remove('selected');
+
+      const selectedBoxContent = selectedBox.innerHTML;
+
+      emptyBox.innerHTML = selectedBoxContent;
+
+      const emptyBoxes = document.querySelectorAll('.empty-box');
+      emptyBoxes.forEach(emptyBox => emptyBox.classList.remove('highlight-animation'));
+
+      selectedBox.classList.remove('selected');
+      selectedBox = null;
+  }
+}
+
+const emptyContainers = document.querySelectorAll('.empty-box');
+emptyContainers.forEach(container => container.addEventListener('click', () => selectDestination(container as HTMLDivElement)));
+
+document.body.addEventListener('click', (event) => {
+    const target = event.target as HTMLElement;
+    if (target.classList.contains('container')) {
+        if (selectedBox !== null) {
+            selectedBox.classList.remove('selected');
+            const emptyBoxes = document.querySelectorAll('.empty-box');
+            emptyBoxes.forEach(emptyBox => emptyBox.classList.remove('highlight-animation'));
+            selectedBox = null;
+        }
+    }
+});
+
+// reset functions
 
 function resetUserInputFields() {
   const userInputForm = document.getElementById('user-combination-form') as HTMLFormElement;
   userInputForm.reset();
+}
+
+function resetSignContainer() {
+  buttons.forEach(button => {
+    const targetId = button.dataset.target;
+
+    if (targetId) {
+      const container = document.getElementById(targetId);
+      if (container) {
+        container.style.display = 'none';
+        button.innerText = 'Show';
+      }
+    }
+  });
+}
+
+// base functions
+
+function populateSelectableSigns() {
+  const container = document.getElementById('selectableSignsContainer');
+
+  allSignNames.forEach((signName, index) => {
+    const signContainer = document.createElement('div');
+    signContainer.classList.add('user-sign-container');
+    signContainer.id = `selectable-sign${index + 1}`;
+
+    const imageElement = document.createElement('div');
+    imageElement.classList.add('selectable-image');
+    imageElement.style.backgroundImage = `url('img/requiem-icons/${signName}RequiemIcon.webp')`;
+    imageElement.id = `image${index + 1}`;
+
+    const signNameElement = document.createElement('p');
+    signNameElement.classList.add('selectable-sign-name');
+    signNameElement.id = `selectableSignName${index + 1}`;
+    signNameElement.textContent = signName;
+
+    signContainer.appendChild(imageElement);
+    signContainer.appendChild(signNameElement);
+
+    container?.appendChild(signContainer);
+  });
 }

@@ -7,7 +7,7 @@
   --text-color: #FFFFFF;
 }
 
-body {
+body{
   background-color: var(--bg-color);
   display: flex;
   flex-direction: column;
@@ -15,7 +15,7 @@ body {
   justify-content: center;
   margin: 0;
   padding: 0;
-  height: 100vh;
+  height: 140vh;
   font-family: 'RobotoRegular', sans-serif;
   font-weight: normal;
   font-style: normal;
@@ -25,7 +25,8 @@ h1,
 h2{
   color: var(--text-color);
   text-align: center;
-  margin: 8px auto;
+  padding: 8px;
+  margin: 0px auto;
 }
 
 button {
@@ -51,6 +52,7 @@ button {
 }
 
 .btn-sign-visibility {
+  border-width: 1px;
   font-size: 14px;
   padding: 8px;
   margin: 8px 8px;
@@ -74,6 +76,7 @@ button {
 .all-signs-container {
   background-color: var(--main-color);
   border-radius: 20px;
+  width: 316px;
   display: flex;
   justify-content: space-between;
   transition-duration: 0.66s;
@@ -114,12 +117,74 @@ button {
   align-items: center;
 }
 
+.all-user-signs-container {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  transition-duration: 0.66s;
+}
+
+.selectable-signs-container {
+  display: flex;
+  width: 316px;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  /* justify-content: space-between; */
+  transition-duration: 0.66s;
+}
+
+.user-sign-container,
+.empty-box{
+  border-radius: 20px;
+  background-color: var(--main-color);
+  width: 100px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.selectable-image {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+}
+
+.selectable-sign-name {
+  font-size: 14px;
+  padding: 0px;
+  margin: 0px auto;
+}
+
+.selected {
+  background-color: var(--accent-color);
+}
+
+@keyframes highlight {
+  0% {
+      background-color: var(--main-color);
+  }
+  50% {
+      background-color: var(--secondary-color);
+  }
+  100% {
+      background-color: var(--main-color);
+  }
+}
+
+.highlight-animation {
+  animation: highlight 2s ease-in-out infinite;
+}
+
 .footer {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 52px;
+  height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
