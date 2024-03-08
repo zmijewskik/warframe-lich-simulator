@@ -5,6 +5,7 @@ Warframe's Kuva Lich system simulator
 TODO:
 - list of checks
 - Lich lvl indicator
+- Selecting signs from lich Known Requiems for Parazon
 - Parazon modifying / swapping mods in Parazon / sign repeat block
    
 ## Available Scripts

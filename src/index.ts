@@ -1,4 +1,5 @@
 document.getElementById('btn-generate-lich')?.addEventListener('click', generateSignSequence);
+document.getElementById('btn-generate-lich')?.addEventListener('click', showMessage);
 document.getElementById('btn-check-combination')?.addEventListener('click', checkCombination);
 
 const allSignNames: string[] = [
@@ -200,4 +201,26 @@ function populateSelectableSigns() {
 
     container?.appendChild(signContainer);
   });
+}
+
+var wasLichSpawned: boolean = false;
+
+function showMessage() {
+  var message = document.getElementById('lichCreatedMessage') as HTMLDivElement;
+  if(message){
+    message.style.display = 'block';
+    void message.offsetWidth;
+    message.style.opacity = '1';
+
+    if(wasLichSpawned == true) {
+      message.innerText = 'New lich arrived!';
+    }
+
+    wasLichSpawned = true;
+    console.log(wasLichSpawned);
+
+    setTimeout(function() {
+      message.style.display = 'none';
+    }, 1000);
+  }
 }
