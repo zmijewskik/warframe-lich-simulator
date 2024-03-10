@@ -1,5 +1,5 @@
 document.getElementById("btn-generate-lich")?.addEventListener("click", generateSignSequence);
-document.getElementById("btn-generate-lich")?.addEventListener("click", showMessage);
+document.getElementById("btn-generate-lich")?.addEventListener("click", showLichSpawnedPopup);
 document.getElementById("btn-check-combination")?.addEventListener("click", checkCombination);
 const allSignNames = [
   "Fass",
@@ -15,6 +15,7 @@ const allSignNames = [
 const lichSignNames = allSignNames.slice(0, -1);
 populateSelectableSigns();
 const buttons = document.querySelectorAll(".btn-sign-visibility");
+const userSignsInParazon = document.querySelectorAll(".empty-box");
 buttons.forEach((button) => {
   button.addEventListener("click", function() {
     const targetId = this.dataset.target;
@@ -45,7 +46,7 @@ function generateSignSequence() {
   const matchingSequence = shuffleArray(signNames).slice(0, 3);
   const shuffledSequence = shuffleArray(matchingSequence);
   resetSignContainer();
-  resetUserInputFields();
+  resetParazonSelection();
   const signs = document.querySelectorAll(".image");
   signs.forEach((image, index) => {
     const imageElement = image;
@@ -59,9 +60,11 @@ function checkCombination() {
   const userSignNames = getUserSignNames();
   const generatedSignNames = getMatchingSequence();
   if (arraysEqual(userSignNames, generatedSignNames)) {
-    alert("Congratulations! Your combination matches!");
+    showCheckCombinationPopup(true);
+    resetSignContainer();
+    resetParazonSelection();
   } else {
-    alert("Oops! Your combination does not match. Try again!");
+    showCheckCombinationPopup(false);
   }
 }
 function getUserSignNames() {
@@ -119,10 +122,6 @@ document.body.addEventListener("click", (event) => {
     }
   }
 });
-function resetUserInputFields() {
-  const userInputForm = document.getElementById("user-combination-form");
-  userInputForm.reset();
-}
 function resetSignContainer() {
   buttons.forEach((button) => {
     const targetId = button.dataset.target;
@@ -132,6 +131,14 @@ function resetSignContainer() {
         container.style.display = "none";
         button.innerText = "Show";
       }
+    }
+  });
+}
+function resetParazonSelection() {
+  userSignsInParazon.forEach((signBox) => {
+    if (signBox) {
+      signBox.style.backgroundImage = "";
+      signBox.textContent = "";
     }
   });
 }
@@ -154,20 +161,41 @@ function populateSelectableSigns() {
     container?.appendChild(signContainer);
   });
 }
-var wasLichSpawned = false;
-function showMessage() {
-  var message = document.getElementById("lichCreatedMessage");
+let wasLichSpawned = false;
+function showLichSpawnedPopup() {
+  let message = document.getElementById("msg-lich-spawned");
   if (message) {
     message.style.display = "block";
-    void message.offsetWidth;
     message.style.opacity = "1";
     if (wasLichSpawned == true) {
       message.innerText = "New lich arrived!";
+    } else {
+      message.innerText = "Lich spawned!";
     }
     wasLichSpawned = true;
-    console.log(wasLichSpawned);
+    setTimeout(function() {
+      message.style.opacity = "0";
+    }, 1e3);
     setTimeout(function() {
       message.style.display = "none";
+    }, 1333);
+  }
+}
+function showCheckCombinationPopup(isTrue) {
+  let message = document.getElementById("msg-combination-check");
+  if (message) {
+    message.style.display = "block";
+    message.style.opacity = "1";
+    if (isTrue == true) {
+      message.innerText = "Good combination!";
+    } else {
+      message.innerText = "Wrong combination. Try again!";
+    }
+    setTimeout(function() {
+      message.style.opacity = "0";
     }, 1e3);
+    setTimeout(function() {
+      message.style.display = "none";
+    }, 1333);
   }
 }

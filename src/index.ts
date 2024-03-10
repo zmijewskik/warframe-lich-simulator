@@ -1,6 +1,12 @@
-document.getElementById('btn-generate-lich')?.addEventListener('click', generateSignSequence);
-document.getElementById('btn-generate-lich')?.addEventListener('click', showMessage);
-document.getElementById('btn-check-combination')?.addEventListener('click', checkCombination);
+document
+  .getElementById('btn-generate-lich')
+  ?.addEventListener('click', generateSignSequence);
+document
+  .getElementById('btn-generate-lich')
+  ?.addEventListener('click', showLichSpawnedPopup);
+document
+  .getElementById('btn-check-combination')
+  ?.addEventListener('click', checkCombination);
 
 const allSignNames: string[] = [
   'Fass',
@@ -11,16 +17,21 @@ const allSignNames: string[] = [
   'Ris',
   'Vome',
   'Xata',
-  'Oull', 
-]
+  'Oull',
+];
 const lichSignNames: string[] = allSignNames.slice(0, -1);
 
 populateSelectableSigns();
 
-const buttons = document.querySelectorAll<HTMLButtonElement>('.btn-sign-visibility');
+const buttons = document.querySelectorAll<HTMLButtonElement>(
+  '.btn-sign-visibility',
+);
 
-buttons.forEach(button => {
-  button.addEventListener('click', function() {
+const userSignsInParazon =
+  document.querySelectorAll<HTMLDivElement>('.empty-box');
+
+buttons.forEach((button) => {
+  button.addEventListener('click', function () {
     const targetId = this.dataset.target;
 
     if (targetId) {
@@ -54,14 +65,18 @@ function generateSignSequence() {
   const shuffledSequence: string[] = shuffleArray(matchingSequence);
 
   resetSignContainer();
-  resetUserInputFields();
+  resetParazonSelection();
 
   const signs = document.querySelectorAll('.image');
   signs.forEach((image, index) => {
     const imageElement = image as HTMLElement;
-    const signNameElement = document.getElementById(`signName${index + 1}`) as HTMLElement;
+    const signNameElement = document.getElementById(
+      `signName${index + 1}`,
+    ) as HTMLElement;
 
-    imageElement.style.backgroundImage = `url('img/requiem-icons/${shuffledSequence[index] + 'RequiemIcon.webp'}')`;
+    imageElement.style.backgroundImage = `url('img/requiem-icons/${
+      shuffledSequence[index] + 'RequiemIcon.webp'
+    }')`;
     signNameElement.textContent = shuffledSequence[index];
   });
 
@@ -72,17 +87,19 @@ function checkCombination() {
   const userSignNames = getUserSignNames();
   const generatedSignNames = getMatchingSequence();
 
-  if(arraysEqual(userSignNames, generatedSignNames)){
-    alert("Congratulations! Your combination matches!");
+  if (arraysEqual(userSignNames, generatedSignNames)) {
+    showCheckCombinationPopup(true);
+    resetSignContainer();
+    resetParazonSelection();
   } else {
-    alert("Oops! Your combination does not match. Try again!");
+    showCheckCombinationPopup(false);
   }
 }
 
 function getUserSignNames(): string[] {
-  const signContainer1  = (document.getElementById('sign1') as HTMLDivElement);
-  const signContainer2 = (document.getElementById('sign2') as HTMLDivElement);
-  const signContainer3 = (document.getElementById('sign3') as HTMLDivElement);
+  const signContainer1 = document.getElementById('sign1') as HTMLDivElement;
+  const signContainer2 = document.getElementById('sign2') as HTMLDivElement;
+  const signContainer3 = document.getElementById('sign3') as HTMLDivElement;
 
   const signName1 = signContainer1.innerText.trim();
   const signName2 = signContainer2.innerText.trim();
@@ -102,8 +119,10 @@ function getMatchingSequence(): string[] {
 }
 
 function arraysEqual(arr1: string[], arr2: string[]): boolean {
-  return arr1.length === arr2.length && 
-  arr1.every((value, index) => value === arr2[index] || value === 'Oull');
+  return (
+    arr1.length === arr2.length &&
+    arr1.every((value, index) => value === arr2[index] || value === 'Oull')
+  );
 }
 
 // selecting signs for Parazon
@@ -112,58 +131,67 @@ let selectedBox: HTMLDivElement | null = null;
 
 function selectBox(box: HTMLDivElement) {
   if (selectedBox !== null) {
-      selectedBox.classList.remove('selected');
+    selectedBox.classList.remove('selected');
   }
   selectedBox = box;
   selectedBox.classList.add('selected');
 
   const emptyBoxes = document.querySelectorAll('.empty-box');
-  emptyBoxes.forEach(emptyBox => emptyBox.classList.add('highlight-animation'));
+  emptyBoxes.forEach((emptyBox) =>
+    emptyBox.classList.add('highlight-animation'),
+  );
 }
 
 const signContainers = document.querySelectorAll('.user-sign-container');
-signContainers.forEach(container => container.addEventListener('click', () => selectBox(container as HTMLDivElement)));
+signContainers.forEach((container) =>
+  container.addEventListener('click', () =>
+    selectBox(container as HTMLDivElement),
+  ),
+);
 
 function selectDestination(emptyBox: HTMLDivElement) {
   if (selectedBox !== null) {
-      emptyBox.classList.remove('selected');
+    emptyBox.classList.remove('selected');
 
-      const selectedBoxContent = selectedBox.innerHTML;
+    const selectedBoxContent = selectedBox.innerHTML;
 
-      emptyBox.innerHTML = selectedBoxContent;
+    emptyBox.innerHTML = selectedBoxContent;
 
-      const emptyBoxes = document.querySelectorAll('.empty-box');
-      emptyBoxes.forEach(emptyBox => emptyBox.classList.remove('highlight-animation'));
+    const emptyBoxes = document.querySelectorAll('.empty-box');
+    emptyBoxes.forEach((emptyBox) =>
+      emptyBox.classList.remove('highlight-animation'),
+    );
 
-      selectedBox.classList.remove('selected');
-      selectedBox = null;
+    selectedBox.classList.remove('selected');
+    selectedBox = null;
   }
 }
 
 const emptyContainers = document.querySelectorAll('.empty-box');
-emptyContainers.forEach(container => container.addEventListener('click', () => selectDestination(container as HTMLDivElement)));
+emptyContainers.forEach((container) =>
+  container.addEventListener('click', () =>
+    selectDestination(container as HTMLDivElement),
+  ),
+);
 
 document.body.addEventListener('click', (event) => {
-    const target = event.target as HTMLElement;
-    if (target.classList.contains('container')) {
-        if (selectedBox !== null) {
-            selectedBox.classList.remove('selected');
-            const emptyBoxes = document.querySelectorAll('.empty-box');
-            emptyBoxes.forEach(emptyBox => emptyBox.classList.remove('highlight-animation'));
-            selectedBox = null;
-        }
+  const target = event.target as HTMLElement;
+  if (target.classList.contains('container')) {
+    if (selectedBox !== null) {
+      selectedBox.classList.remove('selected');
+      const emptyBoxes = document.querySelectorAll('.empty-box');
+      emptyBoxes.forEach((emptyBox) =>
+        emptyBox.classList.remove('highlight-animation'),
+      );
+      selectedBox = null;
     }
+  }
 });
 
 // reset functions
 
-function resetUserInputFields() {
-  const userInputForm = document.getElementById('user-combination-form') as HTMLFormElement;
-  userInputForm.reset();
-}
-
 function resetSignContainer() {
-  buttons.forEach(button => {
+  buttons.forEach((button) => {
     const targetId = button.dataset.target;
 
     if (targetId) {
@@ -172,6 +200,15 @@ function resetSignContainer() {
         container.style.display = 'none';
         button.innerText = 'Show';
       }
+    }
+  });
+}
+
+function resetParazonSelection() {
+  userSignsInParazon.forEach((signBox) => {
+    if (signBox) {
+      signBox.style.backgroundImage = '';
+      signBox.textContent = '';
     }
   });
 }
@@ -203,24 +240,54 @@ function populateSelectableSigns() {
   });
 }
 
-var wasLichSpawned: boolean = false;
+// popups
 
-function showMessage() {
-  var message = document.getElementById('lichCreatedMessage') as HTMLDivElement;
-  if(message){
+let wasLichSpawned: boolean = false;
+
+function showLichSpawnedPopup() {
+  let message = document.getElementById('msg-lich-spawned') as HTMLDivElement;
+  if (message) {
     message.style.display = 'block';
-    void message.offsetWidth;
     message.style.opacity = '1';
 
-    if(wasLichSpawned == true) {
+    if (wasLichSpawned == true) {
       message.innerText = 'New lich arrived!';
+    } else {
+      message.innerText = 'Lich spawned!';
     }
 
     wasLichSpawned = true;
-    console.log(wasLichSpawned);
 
-    setTimeout(function() {
-      message.style.display = 'none';
+    setTimeout(function () {
+      message.style.opacity = '0';
     }, 1000);
+
+    setTimeout(function () {
+      message.style.display = 'none';
+    }, 1333);
+  }
+}
+
+function showCheckCombinationPopup(isTrue: boolean) {
+  let message = document.getElementById(
+    'msg-combination-check',
+  ) as HTMLDivElement;
+  if (message) {
+    message.style.display = 'block';
+    message.style.opacity = '1';
+
+    if (isTrue == true) {
+      message.innerText = 'Good combination!';
+    } else {
+      message.innerText = 'Wrong combination. Try again!';
+    }
+
+    setTimeout(function () {
+      message.style.opacity = '0';
+    }, 1000);
+
+    setTimeout(function () {
+      message.style.display = 'none';
+    }, 1333);
   }
 }
