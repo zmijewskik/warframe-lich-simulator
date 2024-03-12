@@ -92,25 +92,67 @@ function selectBox(box) {
     selectedBox.classList.remove("selected");
   }
   selectedBox = box;
-  selectedBox.classList.add("selected");
-  const emptyBoxes = document.querySelectorAll(".empty-box");
-  emptyBoxes.forEach((emptyBox) => emptyBox.classList.add("highlight-animation"));
-}
-const signContainers = document.querySelectorAll(".user-sign-container");
-signContainers.forEach((container) => container.addEventListener("click", () => selectBox(container)));
-function selectDestination(emptyBox) {
-  if (selectedBox !== null) {
-    emptyBox.classList.remove("selected");
-    const selectedBoxContent = selectedBox.innerHTML;
-    emptyBox.innerHTML = selectedBoxContent;
+  if (!checkForDuplicates(box) || selectedBox.classList.contains("empty-box")) {
+    addDestinationListeners();
+    selectedBox.classList.add("selected");
     const emptyBoxes = document.querySelectorAll(".empty-box");
-    emptyBoxes.forEach((emptyBox2) => emptyBox2.classList.remove("highlight-animation"));
-    selectedBox.classList.remove("selected");
+    emptyBoxes.forEach((emptyBox) => emptyBox.classList.add("highlight-animation"));
+  } else {
     selectedBox = null;
   }
 }
-const emptyContainers = document.querySelectorAll(".empty-box");
-emptyContainers.forEach((container) => container.addEventListener("click", () => selectDestination(container)));
+function clickHandler() {
+  selectBox(this);
+}
+function addSelectionToContainers() {
+  const signContainers = document.querySelectorAll(".user-sign-container");
+  signContainers.forEach((container) => container.addEventListener("click", clickHandler));
+  const emptyBoxContainers = document.querySelectorAll(".empty-box:not(.user-sign-container)");
+  emptyBoxContainers.forEach((container) => container.removeEventListener("click", clickHandler));
+}
+addSelectionToContainers();
+function removeSelectionFromEmptyBoxes() {
+  const emptyBoxContainers = document.querySelectorAll(".empty-box");
+  emptyBoxContainers.forEach((container) => container.removeEventListener("click", clickHandler));
+}
+function removeHiglights() {
+  const emptyBoxes = document.querySelectorAll(".empty-box");
+  emptyBoxes.forEach((emptyBox) => emptyBox.classList.remove("highlight-animation"));
+}
+function selectDestination(emptyBox) {
+  if (selectedBox !== null) {
+    let selectedBoxContent = selectedBox.innerHTML;
+    emptyBox.classList.remove("selected");
+    let emptyBoxContent = emptyBox.innerHTML;
+    emptyBox.innerHTML = selectedBoxContent;
+    if (selectedBox.classList.contains("empty-box")) {
+      selectedBox.innerHTML = emptyBoxContent;
+      if (!emptyBox.classList.contains("user-sign-container")) {
+        selectedBox.classList.remove("user-sign-container");
+      }
+    }
+    if (!emptyBox.classList.contains("user-sign-container")) {
+      emptyBox.classList.add("user-sign-container");
+    }
+    removeSelectionFromEmptyBoxes();
+    addSelectionToContainers();
+    removeHiglights();
+    selectedBox.classList.remove("selected");
+    selectedBox = null;
+    return;
+  }
+}
+function destinationHandler() {
+  selectDestination(this);
+}
+function addDestinationListeners() {
+  const emptyContainers = document.querySelectorAll(".empty-box");
+  emptyContainers.forEach((container) => container.addEventListener("click", destinationHandler));
+}
+function removeDestinationListeners() {
+  const emptyContainers = document.querySelectorAll(".empty-box");
+  emptyContainers.forEach((container) => container.removeEventListener("click", destinationHandler));
+}
 document.body.addEventListener("click", (event) => {
   const target = event.target;
   if (target.classList.contains("container")) {
@@ -122,6 +164,16 @@ document.body.addEventListener("click", (event) => {
     }
   }
 });
+function checkForDuplicates(box) {
+  if (selectedBox !== null) {
+    const userSignNames = getUserSignNames();
+    const signName1 = selectedBox.innerText.trim();
+    if (userSignNames.includes(signName1)) {
+      return true;
+    }
+  }
+  return false;
+}
 function resetSignContainer() {
   buttons.forEach((button) => {
     const targetId = button.dataset.target;
