@@ -133,46 +133,100 @@ function selectBox(box: HTMLDivElement) {
   if (selectedBox !== null) {
     selectedBox.classList.remove('selected');
   }
+
   selectedBox = box;
-  selectedBox.classList.add('selected');
 
-  const emptyBoxes = document.querySelectorAll('.empty-box');
-  emptyBoxes.forEach((emptyBox) =>
-    emptyBox.classList.add('highlight-animation'),
-  );
-}
-
-const signContainers = document.querySelectorAll('.user-sign-container');
-signContainers.forEach((container) =>
-  container.addEventListener('click', () =>
-    selectBox(container as HTMLDivElement),
-  ),
-);
-
-function selectDestination(emptyBox: HTMLDivElement) {
-  if (selectedBox !== null) {
-    emptyBox.classList.remove('selected');
-
-    const selectedBoxContent = selectedBox.innerHTML;
-
-    emptyBox.innerHTML = selectedBoxContent;
+  if (!checkForDuplicates(box) || selectedBox.classList.contains('empty-box')) {
+    addDestinationListeners();
+    selectedBox.classList.add('selected');
 
     const emptyBoxes = document.querySelectorAll('.empty-box');
     emptyBoxes.forEach((emptyBox) =>
-      emptyBox.classList.remove('highlight-animation'),
+      emptyBox.classList.add('highlight-animation'),
     );
-
-    selectedBox.classList.remove('selected');
+  } else {
+    // console.log('Duplicate!');
     selectedBox = null;
   }
 }
 
-const emptyContainers = document.querySelectorAll('.empty-box');
-emptyContainers.forEach((container) =>
-  container.addEventListener('click', () =>
-    selectDestination(container as HTMLDivElement),
-  ),
-);
+function clickHandler(this: HTMLDivElement) {
+  selectBox(this);
+}
+
+function addSelectionToContainers() {
+  const signContainers = document.querySelectorAll('.user-sign-container');
+  signContainers.forEach((container) =>
+    container.addEventListener('click', clickHandler),
+  );
+  const emptyBoxContainers = document.querySelectorAll(
+    '.empty-box:not(.user-sign-container)',
+  );
+  emptyBoxContainers.forEach((container) =>
+    container.removeEventListener('click', clickHandler),
+  );
+}
+addSelectionToContainers();
+
+function removeSelectionFromEmptyBoxes() {
+  const emptyBoxContainers = document.querySelectorAll('.empty-box');
+  emptyBoxContainers.forEach((container) =>
+    container.removeEventListener('click', clickHandler),
+  );
+}
+
+function removeHiglights() {
+  const emptyBoxes = document.querySelectorAll('.empty-box');
+  emptyBoxes.forEach((emptyBox) =>
+    emptyBox.classList.remove('highlight-animation'),
+  );
+}
+
+function selectDestination(emptyBox: HTMLDivElement) {
+  if (selectedBox !== null) {
+    let selectedBoxContent = selectedBox.innerHTML;
+    emptyBox.classList.remove('selected');
+    let emptyBoxContent = emptyBox.innerHTML;
+    emptyBox.innerHTML = selectedBoxContent;
+
+    if (selectedBox.classList.contains('empty-box')) {
+      selectedBox.innerHTML = emptyBoxContent;
+      if (!emptyBox.classList.contains('user-sign-container')) {
+        selectedBox.classList.remove('user-sign-container');
+      }
+    }
+
+    if (!emptyBox.classList.contains('user-sign-container')) {
+      emptyBox.classList.add('user-sign-container');
+    }
+
+    removeSelectionFromEmptyBoxes();
+    addSelectionToContainers();
+    removeHiglights();
+
+    selectedBox.classList.remove('selected');
+    selectedBox = null;
+    return;
+  }
+}
+
+function destinationHandler(this: HTMLDivElement) {
+  selectDestination(this);
+}
+
+function addDestinationListeners() {
+  const emptyContainers = document.querySelectorAll('.empty-box');
+  emptyContainers.forEach((container) =>
+    container.addEventListener('click', destinationHandler),
+  );
+}
+
+function removeDestinationListeners() {
+  const emptyContainers = document.querySelectorAll('.empty-box');
+  emptyContainers.forEach((container) =>
+    container.removeEventListener('click', destinationHandler),
+  );
+}
 
 document.body.addEventListener('click', (event) => {
   const target = event.target as HTMLElement;
@@ -187,6 +241,18 @@ document.body.addEventListener('click', (event) => {
     }
   }
 });
+
+function checkForDuplicates(box: HTMLDivElement): boolean {
+  if (selectedBox !== null) {
+    const userSignNames = getUserSignNames();
+    const signName1 = selectedBox.innerText.trim();
+
+    if (userSignNames.includes(signName1)) {
+      return true;
+    }
+  }
+  return false;
+}
 
 // reset functions
 
